@@ -1,0 +1,123 @@
+A)Select unique job from EMP table. 
+-->select distinct job from emp;
+
+B)List the details of the emps in asc order of the Dptnos and desc of Jobs? 
+-->select * from emp order by deptno asc,job desc;
+
+C)Display all the unique job groups in the descending order? 
+-->select distinct job from emp order by job desc;
+
+D)List the emps who joined before 1981. 
+--> select * from emp where hiredate < (’01-jan-81’);
+
+E)List the Empno, Ename, Sal, Daily sal of all emps in the asc order of Annsal.
+-->select empno ,ename ,sal,sal/30,12*sal annsal from emp order by annsal asc;
+
+F)List the Empno, Ename, Sal, Exp of all emps working for Mgr 7369. 
+-->select empno,ename,sal,exp from emp where mgr = 7369;
+
+G)Display all the details of the emps who’s Comm. Is more than their Sal?
+-->select * from emp where comm. > sal;
+
+H)List the emps who are either ‘CLERK’ or ‘ANALYST’ in the Desc order.
+-->select * from emp where job = ‘CLERK’ or job = ‘ANALYST’ order by job
+desc;
+
+I)List the emps Who Annual sal ranging from 22000 and 45000. 
+-->select * from emp where 12*sal between 22000 and 45000;
+
+J)List the Enames those are starting with ‘S’ and with five characters
+-->select ename from emp where ename like ‘S%’ and length (ename) = 5; 
+
+K)List the emps whose Empno not starting with digit78
+-->select * from emp where empno not like ‘78%’;
+
+L)List all the Clerks of Deptno 20.
+-->select * from emp where job =‘CLERK’ and deptno = 20;
+
+M)List the Emps who are senior to their own MGRS. 
+-->select * from emp w,emp m where w.empno= m.mgr and
+w.hiredate> m.hiredate; 
+
+N)List the Emps of Deptno 20 who’s Jobs are same as Deptno10
+-->select * from emp e ,dept d where d.deptno = 20 and e.deptno = d.deptno and
+e.job in ( select e.job from emp e,dept d where e.deptno = d.deptno and d.deptno
+=10);
+
+O)List the Emps who’s Sal is same as FORD or SMITH in desc order of Sal
+-->Select * from emp where sal in (select sal from emp where ( ename = ‘SMITH’
+or ename = ‘FORD’ )) order by sal desc;
+
+P)List the emps whose jobs same as SMITH or ALLEN. 
+-->select * from emp where job in (select job from emp where
+ename = ‘SMITH’ or ename = ‘ALLEN’);
+
+Q)Any jobs of deptno 10 those that are not found in deptno 20
+-->select e.job from emp e where e.deptno = 10 and e.job not in (select job from
+emp where deptno =20); 
+
+R)Find the highest sal of EMP table. 
+-->Find the highest sal of EMP table. 
+
+S)Find details of highest paid employee. 
+-->select * from emp where sal in (select max(sal) from emp);
+
+T)Find the total sal given to the MGR. 
+-->select sum (sal) from emp where job = ‘MANAGER’;
+
+U)List the emps whose names contains ‘A’
+-->select *
+from emp
+where ename like '%A%';
+
+V)Find all the emps who earn the minimum Salary for each job wise in
+ascending order.
+-->select * from emp where sal in(select min(sal) from emp group by job) order by job asc; 
+
+W) List the emps whose sal greater than Blake’s sal.
+-->select *
+from emp
+wher sal >
+    (select sal
+     from emp
+     where ename = 'BLAKE');
+
+
+X)Create view v1 to select ename, job, dname, loc whose deptno are same.
+-->CREATE VIEW v1 AS
+SELECT e.ename, e.job, d.dname, l.loc
+FROM employees e
+JOIN departments d ON e.deptno = d.deptno
+JOIN locations l ON d.loc = l.loc;
+
+
+Y)Create a procedure with dno as input parameter to fetch ename and dname.
+-->CREATE PROCEDURE fetch_ename_dname (IN p_deptno INT)
+BEGIN
+  SELECT e.ename, d.dname
+  FROM employees e
+  JOIN departments d ON e.deptno = d.deptno
+  WHERE e.deptno = p_deptno;
+END;
+
+
+Z)Add column Pin with bigint data type in table student. 
+-->ALTER TABLE student
+ADD Pin BIGINT;
+
+
+AA)Modify the student
+table to change the sname length from 14 to 40. Create trigger to insert data in emp_log table whenever any update of sal in EMP table. You can set
+action as ‘New Salary’.
+-->ALTER TABLE student
+MODIFY COLUMN sname VARCHAR(40);
+
+CREATE TRIGGER emp_sal_update_trigger
+AFTER UPDATE ON EMP
+FOR EACH ROW
+BEGIN
+  IF OLD.sal <> NEW.sal THEN
+    INSERT INTO emp_log (empno, action, log_date)
+    VALUES (NEW.empno, 'New Salary', NOW());
+  END IF;
+END;
