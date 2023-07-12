@@ -1,0 +1,25 @@
+//que-24-->W.A.J. P to demonstrate try catch block, take two numbers from the user
+//by Command line argument and perform the division operation and
+//handle Arithmetic o O/P- 
+
+package MODULE_2;
+
+import java.util.Scanner;
+
+public class que_24 {
+	 public static void main(String[] args) {
+		 Scanner sc = new Scanner(System.in);
+	        System.out.println("Enter number 1:");
+	        int num1 = sc.nextInt();
+	        System.out.println("Enter number 2:");
+	        int num2 = sc.nextInt();
+	        try 
+	        {
+	            System.out.println(num1 / num2);
+	        }
+	        catch (ArithmeticException e) 
+	        {
+	            System.out.println("Exception in thread main java.lang.ArithmeticException:/ by zero");
+	        }
+	 }
+}
